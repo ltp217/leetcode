@@ -1,5 +1,10 @@
 package main
 
+import (
+	"strconv"
+	"strings"
+)
+
 // 2023.4.26
 // https://leetcode.cn/problems/maximum-sum-of-two-non-overlapping-subarrays/
 func maxSumTwoNoOverlap(nums []int, firstLen int, secondLen int) int {
@@ -33,4 +38,33 @@ func numMovesStones(a int, b int, c int) []int {
 		res[0] = 1
 	}
 	return res
+}
+
+// https://leetcode.cn/problems/time-needed-to-inform-all-employees/
+func numOfMinutes(n int, headID int, manager []int, informTime []int) int {
+	g := make(map[int][]int)
+	for i, m := range manager {
+		g[m] = append(g[m], i)
+	}
+	var dfs func(int) int
+	dfs = func(cur int) (res int) {
+		for _, neighbor := range g[cur] {
+			res1 := dfs(neighbor)
+			if res1 > res {
+				res = res1
+			}
+		}
+		return informTime[cur] + res
+	}
+	return dfs(headID)
+}
+
+// https://leetcode.cn/problems/binary-string-with-substrings-representing-1-to-n/
+func queryString(S string, N int) bool {
+	for i := 1; i <= N; i++ {
+		if !strings.Contains(S, strconv.FormatInt(int64(i), 2)) {
+			return false
+		}
+	}
+	return true
 }

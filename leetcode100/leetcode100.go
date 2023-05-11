@@ -53,3 +53,35 @@ func longestConsecutive(nums []int) int {
 	}
 	return max
 }
+
+// https://leetcode.cn/problems/move-zeroes/?envType=study-plan-v2&id=top-100-liked
+// 283. 移动零
+func moveZeroes(nums []int) {
+	var j int
+	for i, num := range nums {
+		if num != 0 {
+			nums[i], nums[j] = nums[j], nums[i]
+			j++
+		}
+	}
+}
+
+// https://leetcode.cn/problems/container-with-most-water/
+// 11. 盛最多水的容器
+func maxArea(height []int) int {
+	var max int
+	for i, j := 0, len(height)-1; i < j; {
+		var cur int
+		if height[i] < height[j] {
+			cur = height[i] * (j - i)
+			i++
+		} else {
+			cur = height[j] * (j - i)
+			j--
+		}
+		if cur > max {
+			max = cur
+		}
+	}
+	return max
+}
