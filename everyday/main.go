@@ -301,6 +301,24 @@ func applyOperations(nums []int) []int {
 	return res
 }
 
+// https://leetcode.cn/problems/number-of-unequal-triplets-in-array/
+func unequalTriplets(nums []int) int {
+	total := 0
+	mmap := make(map[int]int)
+	for _, num := range nums {
+		mmap[num]++
+	}
+	if len(mmap) <= 2 {
+		return 0
+	}
+	n := len(nums)
+	t := 0
+	for _, v := range mmap {
+		total, t = total+t*v*(n-t-v), t+v
+	}
+	return total
+}
+
 func main() {
 	//maxEqualRowsAfterFlips([][]int{{0, 0, 0}, {0, 0, 1}, {1, 1, 0}})
 	words := []string{"bzmxvzjxfddcuznspdcbwiojiqf", "mwguoaskvramwgiweogzulcinycosovozppl", "uigevazgbrddbcsvrvnngfrvkhmqszjicpieahs", "uivcdsboxnraqpokjzaayedf", "yalc", "bbhlbmpskgxmxosft", "vigplemkoni", "krdrlctodtmprpxwditvcps", "gqjwokkskrb", "bslxxpabivbvzkozzvdaykaatzrpe", "qwhzcwkchluwdnqjwhabroyyxbtsrsxqjnfpadi", "siqbezhkohmgbenbkikcxmvz", "ddmaireeouzcvffkcohxus", "kjzguljbwsxlrd", "gqzuqcljvcpmoqlnrxvzqwoyas", "vadguvpsubcwbfbaviedr", "nxnorutztxfnpvmukpwuraen", "imgvujjeygsiymdxp", "rdzkpk", "cuap", "qcojjumwp", "pyqzshwykhtyzdwzakjejqyxbganow", "cvxuskhcloxykcu", "ul", "axzscbjajazvbxffrydajapweci"}
