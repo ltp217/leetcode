@@ -319,6 +319,42 @@ func unequalTriplets(nums []int) int {
 	return total
 }
 
+// https://leetcode.cn/problems/number-of-times-binary-string-is-prefix-aligned/
+// 1375
+func numTimesAllBlue(flips []int) int {
+	res, right := 0, 0
+	for i, flip := range flips {
+		//right = max(right, flip)
+		if flip > right {
+			right = flip
+		}
+		if right == i+1 {
+			res++
+		}
+	}
+	return res
+}
+
+// https://leetcode.cn/problems/can-make-palindrome-from-substring/
+//
+//	1177
+func canMakePaliQueries(s string, queries [][]int) []bool {
+	sum := make([][26]int, len(s)+1)
+	for i, c := range s {
+		sum[i+1] = sum[i]
+		sum[i+1][c-'a']++
+	}
+	res := make([]bool, len(queries))
+	for i, q := range queries {
+		left, right, k, m := q[0], q[1], q[2], 0
+		for j := 0; j < 26; j++ {
+			m += (sum[right+1][j] - sum[left][j]) % 2
+		}
+		res[i] = m/2 <= k
+	}
+	return res
+}
+
 func main() {
 	//maxEqualRowsAfterFlips([][]int{{0, 0, 0}, {0, 0, 1}, {1, 1, 0}})
 	words := []string{"bzmxvzjxfddcuznspdcbwiojiqf", "mwguoaskvramwgiweogzulcinycosovozppl", "uigevazgbrddbcsvrvnngfrvkhmqszjicpieahs", "uivcdsboxnraqpokjzaayedf", "yalc", "bbhlbmpskgxmxosft", "vigplemkoni", "krdrlctodtmprpxwditvcps", "gqjwokkskrb", "bslxxpabivbvzkozzvdaykaatzrpe", "qwhzcwkchluwdnqjwhabroyyxbtsrsxqjnfpadi", "siqbezhkohmgbenbkikcxmvz", "ddmaireeouzcvffkcohxus", "kjzguljbwsxlrd", "gqzuqcljvcpmoqlnrxvzqwoyas", "vadguvpsubcwbfbaviedr", "nxnorutztxfnpvmukpwuraen", "imgvujjeygsiymdxp", "rdzkpk", "cuap", "qcojjumwp", "pyqzshwykhtyzdwzakjejqyxbganow", "cvxuskhcloxykcu", "ul", "axzscbjajazvbxffrydajapweci"}
