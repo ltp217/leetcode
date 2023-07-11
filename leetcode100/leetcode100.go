@@ -1,6 +1,8 @@
-package leetcode100
+package main
 
-import "sort"
+import (
+	"sort"
+)
 
 // https://leetcode.cn/problems/two-sum/?envType=study-plan-v2&id=top-100-liked
 // 1. 两数之和
@@ -185,6 +187,42 @@ func findAnagrams(s string, p string) []int {
 		}
 		if right-left == len(p) {
 			res = append(res, left)
+		}
+	}
+	return res
+}
+
+// https://leetcode.cn/problems/subarray-sum-equals-k/?envType=study-plan-v2&envId=top-100-liked
+// 560. 和为K的子数组
+func subarraySum(nums []int, k int) int {
+	count, pre := 0, 0
+	m := map[int]int{} // key: 前缀和, value: 前缀和出现的次数
+	m[0] = 1
+	for i := 0; i < len(nums); i++ {
+		pre += nums[i]
+		if _, ok := m[pre-k]; ok {
+			count += m[pre-k]
+		}
+		m[pre]++
+	}
+	return count
+}
+
+// https://leetcode.cn/problems/sliding-window-maximum/?envType=study-plan-v2&envId=top-100-liked
+// 239. 滑动窗口最大值
+func maxSlidingWindow(nums []int, k int) []int {
+	var res []int
+	var queue []int
+	for i := 0; i < len(nums); i++ {
+		for len(queue) > 0 && nums[queue[len(queue)-1]] < nums[i] {
+			queue = queue[:len(queue)-1]
+		}
+		queue = append(queue, i)
+		if queue[0] == i-k {
+			queue = queue[1:]
+		}
+		if i >= k-1 {
+			res = append(res, nums[queue[0]])
 		}
 	}
 	return res

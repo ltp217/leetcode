@@ -355,6 +355,56 @@ func canMakePaliQueries(s string, queries [][]int) []bool {
 	return res
 }
 
+// https://leetcode.cn/problems/reconstruct-a-2-row-binary-matrix/
+func reconstructMatrix(upper int, lower int, colsum []int) [][]int {
+	n := len(colsum)
+	res := make([][]int, 2)
+	res[0] = make([]int, n)
+	res[1] = make([]int, n)
+	for i := 0; i < n; i++ {
+		if colsum[i] == 2 {
+			res[0][i] = 1
+			res[1][i] = 1
+			upper--
+			lower--
+		}
+	}
+	for i := 0; i < n; i++ {
+		if colsum[i] == 1 {
+			if upper > 0 {
+				res[0][i] = 1
+				upper--
+			} else {
+				res[1][i] = 1
+				lower--
+			}
+		}
+	}
+	if upper != 0 || lower != 0 {
+		return [][]int{}
+	}
+	return res
+}
+
+// https://leetcode.cn/problems/maximum-alternating-subsequence-sum/
+func maxAlternatingSum(nums []int) int64 {
+	n := len(nums)
+	dp := make([][2]int64, n)
+	dp[0][0] = int64(nums[0])
+	for i := 1; i < n; i++ {
+		dp[i][0] = max2(dp[i-1][0], dp[i-1][1]+int64(nums[i]))
+		dp[i][1] = max2(dp[i-1][1], dp[i-1][0]-int64(nums[i]))
+	}
+	return dp[n-1][0]
+}
+
+func max2(x, y int64) int64 {
+	if x > y {
+		return x
+	}
+	return y
+}
+
 func main() {
 	//maxEqualRowsAfterFlips([][]int{{0, 0, 0}, {0, 0, 1}, {1, 1, 0}})
 	words := []string{"bzmxvzjxfddcuznspdcbwiojiqf", "mwguoaskvramwgiweogzulcinycosovozppl", "uigevazgbrddbcsvrvnngfrvkhmqszjicpieahs", "uivcdsboxnraqpokjzaayedf", "yalc", "bbhlbmpskgxmxosft", "vigplemkoni", "krdrlctodtmprpxwditvcps", "gqjwokkskrb", "bslxxpabivbvzkozzvdaykaatzrpe", "qwhzcwkchluwdnqjwhabroyyxbtsrsxqjnfpadi", "siqbezhkohmgbenbkikcxmvz", "ddmaireeouzcvffkcohxus", "kjzguljbwsxlrd", "gqzuqcljvcpmoqlnrxvzqwoyas", "vadguvpsubcwbfbaviedr", "nxnorutztxfnpvmukpwuraen", "imgvujjeygsiymdxp", "rdzkpk", "cuap", "qcojjumwp", "pyqzshwykhtyzdwzakjejqyxbganow", "cvxuskhcloxykcu", "ul", "axzscbjajazvbxffrydajapweci"}
