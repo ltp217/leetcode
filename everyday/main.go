@@ -405,6 +405,51 @@ func max2(x, y int64) int64 {
 	return y
 }
 
+// https://leetcode.cn/problems/alternating-digit-sum/
+func alternateDigitSum(n int) int {
+	total := 0
+	var s1, s2 int
+	for n > 0 {
+		total++
+		if total%2 == 1 {
+			s1 += n % 10
+		} else {
+			s2 += n % 10
+		}
+		n /= 10
+	}
+	if total%2 == 1 {
+		return s1 - s2
+	}
+	return s2 - s1
+}
+
+// https://leetcode.cn/problems/minimum-falling-path-sum/
+func minFallingPathSum(matrix [][]int) int {
+	n := len(matrix)
+	dp := make([][]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([]int, n)
+		dp[0][i] = matrix[0][i]
+	}
+	for i := 1; i < n; i++ {
+		for j := 0; j < n; j++ {
+			dp[i][j] = dp[i-1][j] + matrix[i][j]
+			if j > 0 {
+				dp[i][j] = min(dp[i][j], dp[i-1][j-1]+matrix[i][j])
+			}
+			if j < n-1 {
+				dp[i][j] = min(dp[i][j], dp[i-1][j+1]+matrix[i][j])
+			}
+		}
+	}
+	res := dp[n-1][0]
+	for _, v := range dp[n-1] {
+		res = min(res, v)
+	}
+	return res
+}
+
 func main() {
 	//maxEqualRowsAfterFlips([][]int{{0, 0, 0}, {0, 0, 1}, {1, 1, 0}})
 	words := []string{"bzmxvzjxfddcuznspdcbwiojiqf", "mwguoaskvramwgiweogzulcinycosovozppl", "uigevazgbrddbcsvrvnngfrvkhmqszjicpieahs", "uivcdsboxnraqpokjzaayedf", "yalc", "bbhlbmpskgxmxosft", "vigplemkoni", "krdrlctodtmprpxwditvcps", "gqjwokkskrb", "bslxxpabivbvzkozzvdaykaatzrpe", "qwhzcwkchluwdnqjwhabroyyxbtsrsxqjnfpadi", "siqbezhkohmgbenbkikcxmvz", "ddmaireeouzcvffkcohxus", "kjzguljbwsxlrd", "gqzuqcljvcpmoqlnrxvzqwoyas", "vadguvpsubcwbfbaviedr", "nxnorutztxfnpvmukpwuraen", "imgvujjeygsiymdxp", "rdzkpk", "cuap", "qcojjumwp", "pyqzshwykhtyzdwzakjejqyxbganow", "cvxuskhcloxykcu", "ul", "axzscbjajazvbxffrydajapweci"}
