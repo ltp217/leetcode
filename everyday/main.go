@@ -482,6 +482,22 @@ func captureForts(forts []int) int {
 	return res
 }
 
+// https://leetcode.cn/problems/eliminate-maximum-number-of-monsters/?envType=daily-question&envId=2023-09-03
+func eliminateMaximum(dist []int, speed []int) int {
+	n := len(dist)
+	t := make([]int, n)
+	for i := 0; i < n; i++ {
+		t[i] = (dist[i]-1)/speed[i] + 1
+	}
+	sort.Ints(t)
+	for i := 0; i < n; i++ {
+		if t[i] <= i {
+			return i
+		}
+	}
+	return n
+}
+
 func main() {
 	fmt.Println(captureForts([]int{1, 0, 0, -1, 0, 0, 0, 0, 1}))
 	//maxEqualRowsAfterFlips([][]int{{0, 0, 0}, {0, 0, 1}, {1, 1, 0}})
