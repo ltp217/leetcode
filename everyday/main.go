@@ -498,6 +498,56 @@ func eliminateMaximum(dist []int, speed []int) int {
 	return n
 }
 
+// https://leetcode.cn/problems/form-smallest-number-from-two-digit-arrays/?envType=daily-question&envId=2023-09-05
+func minNumber(nums1 []int, nums2 []int) int {
+	mmap := make(map[int]bool)
+	min1, min2 := nums1[0], nums2[0]
+	for _, v := range nums1 {
+		mmap[v] = true
+		if v < min1 {
+			min1 = v
+		}
+	}
+	var same []int
+	for _, v := range nums2 {
+		if mmap[v] {
+			same = append(same, v)
+		}
+		if v < min2 {
+			min2 = v
+		}
+	}
+	if len(same) > 0 {
+		sort.Ints(same)
+		return same[0]
+	}
+	if min1 < min2 {
+		return min1*10 + min2
+	}
+	return min2*10 + min1
+}
+
+// https://leetcode.cn/problems/lowest-common-ancestor-of-deepest-leaves/?envType=daily-question&envId=2023-09-06
+func lcaDeepestLeaves(root *TreeNode) *TreeNode {
+	_, res := lcaDeepestLeavesHelper(root, 0)
+	return res
+}
+
+func lcaDeepestLeavesHelper(root *TreeNode, depth int) (int, *TreeNode) {
+	if root == nil {
+		return depth, nil
+	}
+	leftDepth, leftNode := lcaDeepestLeavesHelper(root.Left, depth+1)
+	rightDepth, rightNode := lcaDeepestLeavesHelper(root.Right, depth+1)
+	if leftDepth == rightDepth {
+		return leftDepth, root
+	}
+	if leftDepth > rightDepth {
+		return leftDepth, leftNode
+	}
+	return rightDepth, rightNode
+}
+
 func main() {
 	fmt.Println(captureForts([]int{1, 0, 0, -1, 0, 0, 0, 0, 1}))
 	//maxEqualRowsAfterFlips([][]int{{0, 0, 0}, {0, 0, 1}, {1, 1, 0}})
