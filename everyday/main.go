@@ -1,11 +1,13 @@
 package main
 
 import (
+	"container/heap"
 	"fmt"
 	"math"
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 // 2023.4.26
@@ -546,6 +548,169 @@ func lcaDeepestLeavesHelper(root *TreeNode, depth int) (int, *TreeNode) {
 		return leftDepth, leftNode
 	}
 	return rightDepth, rightNode
+}
+
+// https://leetcode.cn/problems/minimum-time-to-repair-cars/?envType=daily-question&envId=2023-09-07
+// 给你一个整数数组 ranks ，表示一些机械工的 能力值 。ranksi 是第 i 位机械工的能力值。能力值为 r 的机械工可以在 r * n2 分钟内修好 n 辆车。
+// 同时给你一个整数 cars ，表示总共需要修理的汽车数目。
+// 请你返回修理所有汽车 最少 需要多少时间。
+// 注意：所有机械工可以同时修理汽车。
+func repairCars(ranks []int, cars int) int64 {
+	l, r := 1, ranks[0]*cars*cars
+	var check = func(m int) bool {
+		cnt := 0
+		for _, x := range ranks {
+			cnt += int(math.Sqrt(float64(m / x)))
+		}
+		return cnt >= cars
+	}
+	for l < r {
+		m := (l + r) >> 1
+		if check(m) {
+			r = m
+		} else {
+			l = m + 1
+		}
+	}
+	return int64(l)
+}
+
+// https://leetcode.cn/problems/course-schedule/?envType=daily-question&envId=2023-09-09
+func canFinish(numCourses int, prerequisites [][]int) bool {
+	var (
+		edges   = make([][]int, numCourses)
+		visited = make([]int, numCourses)
+		result  []int
+		valid   = true
+		dfs     func(int)
+	)
+	dfs = func(i int) {
+		visited[i] = 1
+		for _, v := range edges[i] {
+			if visited[v] == 0 {
+				dfs(v)
+				if !valid {
+					return
+				}
+			} else if visited[v] == 1 {
+				valid = false
+				return
+			}
+		}
+		visited[i] = 2
+		result = append(result, i)
+	}
+	for _, info := range prerequisites {
+		edges[info[1]] = append(edges[info[1]], info[0])
+	}
+	for i := 0; i < numCourses && valid; i++ {
+		if visited[i] == 0 {
+			dfs(i)
+		}
+	}
+	return valid
+}
+
+// https://leetcode.cn/problems/camelcase-matching/solutions/2224532/tuo-feng-shi-pi-pei-by-leetcode-solution-pwq7/?envType=daily-question&envId=2023-09-10
+func camelMatch(queries []string, pattern string) []bool {
+	n := len(queries)
+	res := make([]bool, n)
+	for i := 0; i < n; i++ {
+		res[i] = true
+		p := 0
+		for _, c := range queries[i] {
+			if p < len(pattern) && pattern[p] == byte(c) {
+				p++
+			} else if unicode.IsUpper(c) {
+				res[i] = false
+				break
+			}
+		}
+		if p < len(pattern) {
+			res[i] = false
+		}
+	}
+	return res
+}
+
+// https://leetcode.cn/problems/course-schedule-iii/?envType=daily-question&envId=2023-09-11
+func scheduleCourse(courses [][]int) int {
+	sort.Slice(courses, func(i, j int) bool {
+		return courses[i][1] < courses[j][1]
+	})
+
+	h := &Heap{}
+	total := 0 // 优先队列中所有课程的总时间
+	for _, course := range courses {
+		if t := course[0]; total+t <= course[1] {
+			total += t
+			heap.Push(h, t)
+		} else if h.Len() > 0 && t < h.IntSlice[0] {
+			total += t - h.IntSlice[0]
+			h.IntSlice[0] = t
+			heap.Fix(h, 0)
+		}
+	}
+	return h.Len()
+}
+
+type Heap struct {
+	sort.IntSlice
+}
+
+func (h Heap) Less(i, j int) bool {
+	return h.IntSlice[i] > h.IntSlice[j]
+}
+
+func (h *Heap) Push(x interface{}) {
+	h.IntSlice = append(h.IntSlice, x.(int))
+}
+
+func (h *Heap) Pop() interface{} {
+	a := h.IntSlice
+	v := a[len(a)-1]
+	h.IntSlice = a[:len(a)-1]
+	return v
+}
+
+// https://leetcode.cn/problems/course-schedule-iv/?envType=daily-question&envId=2023-09-12
+func checkIfPrerequisite(numCourses int, prerequisites [][]int, queries [][]int) []bool {
+	g := make([][]int, numCourses)
+	indegree := make([]int, numCourses)
+	isPre := make([][]bool, numCourses)
+	for i, _ := range isPre {
+		isPre[i] = make([]bool, numCourses)
+		g[i] = []int{}
+	}
+	for _, p := range prerequisites {
+		indegree[p[1]]++
+		g[p[0]] = append(g[p[0]], p[1])
+	}
+	q := []int{}
+	for i := 0; i < numCourses; i++ {
+		if indegree[i] == 0 {
+			q = append(q, i)
+		}
+	}
+	for len(q) > 0 {
+		cur := q[0]
+		q = q[1:]
+		for _, ne := range g[cur] {
+			isPre[cur][ne] = true
+			for i := 0; i < numCourses; i++ {
+				isPre[i][ne] = isPre[i][ne] || isPre[i][cur]
+			}
+			indegree[ne]--
+			if indegree[ne] == 0 {
+				q = append(q, ne)
+			}
+		}
+	}
+	var res []bool
+	for _, query := range queries {
+		res = append(res, isPre[query[0]][query[1]])
+	}
+	return res
 }
 
 func main() {
