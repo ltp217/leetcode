@@ -10,6 +10,37 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/check-knight-tour-configuration/description/?envType=daily-question&envId=2023-09-13
+func checkValidGrid(grid [][]int) bool {
+	if grid[0][0] != 0 {
+		return false
+	}
+	r, c, n := 0, 0, len(grid)
+	var rc = [][]int{{1, 2}, {1, -2}, {-1, 2}, {-1, -2}, {2, 1}, {2, -1}, {-2, 1}, {-2, -1}}
+	for i := 1; i < n*n; i++ {
+		valid := false
+		for _, v := range rc {
+			r1, c1 := r+v[0], c+v[1]
+			if isValidStep(r1, c1, grid) && grid[r1][c1] == i {
+				r, c = r1, c1
+				valid = true
+				continue
+			}
+		}
+		if !valid {
+			return false
+		}
+	}
+	return true
+}
+
+func isValidStep(r, c int, grid [][]int) bool {
+	if r < 0 || r >= len(grid) || c < 0 || c >= len(grid[0]) {
+		return false
+	}
+	return true
+}
+
 // 2023.4.26
 // https://leetcode.cn/problems/maximum-sum-of-two-non-overlapping-subarrays/
 func maxSumTwoNoOverlap(nums []int, firstLen int, secondLen int) int {
