@@ -10,6 +10,29 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/queens-that-can-attack-the-king/description/?envType=daily-question&envId=2023-09-14
+func queensAttacktheKing(queens [][]int, king []int) [][]int {
+	type point struct {
+		x, y int
+	}
+	x, y := king[0], king[1]
+	var res [][]int
+	var yc = [][]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}}
+	mmap := make(map[point]bool)
+	for _, q := range queens {
+		mmap[point{q[0], q[1]}] = true
+	}
+	for _, v := range yc {
+		for i, j := x, y; i >= 0 && i < 8 && j >= 0 && j < 8; i, j = i+v[0], j+v[1] {
+			if mmap[point{i, j}] {
+				res = append(res, []int{i, j})
+				break
+			}
+		}
+	}
+	return res
+}
+
 // https://leetcode.cn/problems/check-knight-tour-configuration/description/?envType=daily-question&envId=2023-09-13
 func checkValidGrid(grid [][]int) bool {
 	if grid[0][0] != 0 {
