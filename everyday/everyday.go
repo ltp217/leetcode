@@ -10,6 +10,29 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/house-robber/description/?envType=daily-question&envId=2023-09-16
+func rob(nums []int) int {
+	dp := make([]int, len(nums)+1)
+	dp[0] = 0
+	dp[1] = nums[0]
+	for i := 2; i <= len(nums); i++ {
+		dp[i] = max(dp[i-1], dp[i-2]+nums[i-1])
+	}
+	return dp[len(nums)]
+}
+
+// https://leetcode.cn/problems/WHnhjV/description/?envType=daily-question&envId=2023-09-15
+func giveGem(gem []int, operations [][]int) int {
+	for _, op := range operations {
+		index1, index2 := op[0], op[1]
+		zs := gem[index1] / 2
+		gem[index1] -= zs
+		gem[index2] += zs
+	}
+	sort.Ints(gem)
+	return gem[len(gem)-1] - gem[0]
+}
+
 // https://leetcode.cn/problems/queens-that-can-attack-the-king/description/?envType=daily-question&envId=2023-09-14
 func queensAttacktheKing(queens [][]int, king []int) [][]int {
 	type point struct {
