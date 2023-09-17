@@ -10,6 +10,18 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/house-robber-ii/description/?envType=daily-question&envId=2023-09-17
+func rob2(nums []int) int {
+	n := len(nums)
+	if n == 1 {
+		return nums[0]
+	}
+	if n == 2 {
+		return max(nums[0], nums[1])
+	}
+	return max(rob(nums[:n-1]), rob(nums[1:]))
+}
+
 // https://leetcode.cn/problems/house-robber/description/?envType=daily-question&envId=2023-09-16
 func rob(nums []int) int {
 	dp := make([]int, len(nums)+1)
