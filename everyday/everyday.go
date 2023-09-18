@@ -10,6 +10,22 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/house-robber-iii/description/?envType=daily-question&envId=2023-09-18
+func rob3(root *TreeNode) int {
+	val := dfsrob3(root)
+	return max(val[0], val[1])
+}
+
+func dfsrob3(node *TreeNode) []int {
+	if node == nil {
+		return []int{0, 0}
+	}
+	l, r := dfsrob3(node.Left), dfsrob3(node.Right)
+	selected := node.Val + l[1] + r[1]
+	unselected := max(l[0], l[1]) + max(r[0], r[1])
+	return []int{selected, unselected}
+}
+
 // https://leetcode.cn/problems/house-robber-ii/description/?envType=daily-question&envId=2023-09-17
 func rob2(nums []int) int {
 	n := len(nums)
