@@ -84,13 +84,6 @@ func (this *LockingTree) checkAndUnlockDescendant(num int) bool {
 	return res
 }
 
-/**
- * Your LockingTree object will be instantiated and called as such:
- * obj := Constructor(parent);
- * param_1 := obj.Lock(num,user);
- * param_2 := obj.Unlock(num,user);
- * param_3 := obj.Upgrade(num,user);
- */
 // https://leetcode.cn/problems/distribute-money-to-maximum-children/description/?envType=daily-question&envId=2023-09-22
 func distMoney(money int, children int) int {
 	if money < children {
