@@ -10,6 +10,105 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/pass-the-pillow/?envType=daily-question&envId=2023-09-26
+func passThePillow(n int, time int) int {
+	time = time % (2 * (n - 1))
+	if time >= n {
+		return n*2 - time - 1
+	}
+	return time + 1
+}
+
+// https://leetcode.cn/problems/lru-cache/description/?envType=daily-question&envId=2023-09-24
+type LRUCache struct {
+	size       int
+	capacity   int
+	cache      map[int]*DLinkedNode
+	head, tail *DLinkedNode
+}
+
+type DLinkedNode struct {
+	key, value int
+	pre, next  *DLinkedNode
+}
+
+func initDLinkedNode(key, value int) *DLinkedNode {
+	return &DLinkedNode{
+		key:   key,
+		value: value,
+	}
+}
+
+func ConstructorLRUCache(capacity int) LRUCache {
+	l := LRUCache{
+		size:     0,
+		capacity: capacity,
+		cache:    map[int]*DLinkedNode{},
+		head:     initDLinkedNode(0, 0),
+		tail:     initDLinkedNode(0, 0),
+	}
+	l.head.next = l.tail
+	l.tail.pre = l.head
+	return l
+}
+
+func (this *LRUCache) Get(key int) int {
+	if _, ok := this.cache[key]; !ok {
+		return -1
+	}
+	node := this.cache[key]
+	this.moveToHead(node)
+	return node.value
+}
+
+func (this *LRUCache) Put(key int, value int) {
+	if _, ok := this.cache[key]; !ok {
+		node := initDLinkedNode(key, value)
+		this.cache[key] = node
+		this.addToHead(node)
+		this.size++
+		if this.size > this.capacity {
+			removed := this.removeTail()
+			delete(this.cache, removed.key)
+			this.size--
+		}
+	} else {
+		node := this.cache[key]
+		node.value = value
+		this.moveToHead(node)
+	}
+}
+
+func (this *LRUCache) moveToHead(node *DLinkedNode) {
+	this.removeNode(node)
+	this.addToHead(node)
+}
+
+func (this *LRUCache) removeNode(node *DLinkedNode) {
+	node.pre.next = node.next
+	node.next.pre = node.pre
+}
+
+func (this *LRUCache) addToHead(node *DLinkedNode) {
+	node.pre = this.head
+	node.next = this.head.next
+	this.head.next.pre = node
+	this.head.next = node
+}
+
+func (this *LRUCache) removeTail() *DLinkedNode {
+	node := this.tail.pre
+	this.removeNode(node)
+	return node
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * obj := Constructor(capacity);
+ * param_1 := obj.Get(key);
+ * obj.Put(key,value);
+ */
+
 // https://leetcode.cn/problems/operations-on-tree/description/?envType=daily-question&envId=2023-09-23
 type LockingTree struct {
 	parent       []int
