@@ -10,6 +10,31 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/filter-restaurants-by-vegan-friendly-price-and-distance/description/?envType=daily-question&envId=2023-09-27
+func filterRestaurants(restaurants [][]int, veganFriendly int, maxPrice int, maxDistance int) []int {
+	var res [][]int
+	for _, r := range restaurants {
+
+		if r[3] <= maxPrice && r[4] <= maxDistance {
+			if veganFriendly == 1 && r[2] == 0 {
+				continue
+			}
+			res = append(res, r)
+		}
+	}
+	sort.Slice(res, func(i, j int) bool {
+		if res[i][1] == res[j][1] {
+			return res[i][0] > res[j][0]
+		}
+		return res[i][1] > res[j][1]
+	})
+	var ans []int
+	for _, r := range res {
+		ans = append(ans, r[0])
+	}
+	return ans
+}
+
 // https://leetcode.cn/problems/pass-the-pillow/?envType=daily-question&envId=2023-09-26
 func passThePillow(n int, time int) int {
 	time = time % (2 * (n - 1))
