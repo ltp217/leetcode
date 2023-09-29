@@ -10,6 +10,21 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/can-place-flowers/description/?envType=daily-question&envId=2023-09-29
+func canPlaceFlowers(flowerbed []int, n int) bool {
+	for i, size := 0, len(flowerbed); i < size && n > 0; {
+		if flowerbed[i] == 1 {
+			i += 2
+		} else if i == size-1 || flowerbed[i+1] == 0 {
+			n--
+			i += 2
+		} else {
+			i += 3
+		}
+	}
+	return n <= 0
+}
+
 // https://leetcode.cn/problems/filter-restaurants-by-vegan-friendly-price-and-distance/description/?envType=daily-question&envId=2023-09-27
 func filterRestaurants(restaurants [][]int, veganFriendly int, maxPrice int, maxDistance int) []int {
 	var res [][]int
