@@ -10,6 +10,20 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/?envType=daily-question&envId=2023-10-02
+func maxProfit(prices []int) int {
+	n := len(prices)
+	// dp[i][j] 表示第i天的状态，j为0表示手上有现金，为1表示有股票
+	dp := make([][2]int, n)
+	dp[0][0] = 0
+	dp[0][1] = -prices[0]
+	for i := 1; i < n; i++ {
+		dp[i][0] = max(dp[i-1][0], dp[i-1][1]+prices[i])
+		dp[i][1] = max(dp[i-1][1], dp[i-1][0]-prices[i])
+	}
+	return dp[n-1][0]
+}
+
 // https://leetcode.cn/problems/can-place-flowers/description/?envType=daily-question&envId=2023-09-29
 func canPlaceFlowers(flowerbed []int, n int) bool {
 	for i, size := 0, len(flowerbed); i < size && n > 0; {
