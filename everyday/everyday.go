@@ -10,6 +10,32 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/movement-of-robots/description/?envType=daily-question&envId=2023-10-10
+func sumDistance(nums []int, s string, d int) int {
+	const mod = 1e9 + 7
+	n := len(nums)
+	pos := make([]int, n)
+	for i, ch := range s {
+		if ch == 'L' {
+			pos[i] = nums[i] - d
+		} else {
+			pos[i] = nums[i] + d
+		}
+	}
+	sort.Ints(pos)
+	res := 0
+	for i := 1; i < n; i++ {
+		res += int(math.Mod(float64((pos[i]-pos[i-1])*i), mod)) * int(math.Mod(float64(n-i), mod))
+		res %= mod
+	}
+	return res
+}
+
+// https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii/description/?envType=daily-question&envId=2023-10-03
+//func maxProfit2(prices []int) int {
+//	return 0
+//}
+
 // https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-ii/description/?envType=daily-question&envId=2023-10-02
 func maxProfit(prices []int) int {
 	n := len(prices)
