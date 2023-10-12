@@ -10,6 +10,30 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/find-the-array-concatenation-value/description/?envType=daily-question&envId=2023-10-12
+func findTheArrayConcVal(nums []int) int64 {
+	if len(nums) == 1 {
+		return int64(nums[0])
+	}
+	var res int64
+	n := len(nums)
+	for i := 0; i < n/2; i++ {
+		a, b := nums[i], nums[n-i-1]
+		temp := int64(b)
+		wei := 0
+		for b > 0 {
+			b = b / 10
+			wei++
+		}
+		temp += int64(a) * int64(math.Pow10(wei))
+		res += temp
+	}
+	if n%2 == 1 {
+		res += int64(nums[n/2])
+	}
+	return res
+}
+
 // https://leetcode.cn/problems/movement-of-robots/description/?envType=daily-question&envId=2023-10-10
 func sumDistance(nums []int, s string, d int) int {
 	const mod = 1e9 + 7
