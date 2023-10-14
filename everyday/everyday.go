@@ -10,6 +10,15 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/single-number/description/?envType=daily-question&envId=2023-10-14
+func singleNumber(nums []int) int {
+	res := 0
+	for _, num := range nums {
+		res ^= num
+	}
+	return res
+}
+
 // https://leetcode.cn/problems/find-the-array-concatenation-value/description/?envType=daily-question&envId=2023-10-12
 func findTheArrayConcVal(nums []int) int64 {
 	if len(nums) == 1 {
