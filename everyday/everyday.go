@@ -10,6 +10,62 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/count-the-digits-that-divide-a-number/description/?envType=daily-question&envId=2023-10-26
+func countDigits(num int) int {
+	res := 0
+	temp := num
+	for temp > 0 {
+		if num%(temp%10) == 0 {
+			res++
+		}
+		temp = temp / 10
+	}
+	return res
+}
+
+// https://leetcode.cn/problems/find-the-punishment-number-of-an-integer/description/?envType=daily-question&envId=2023-10-25
+func punishmentNumber(n int) int {
+	res := 0
+	for i := 1; i <= n; i++ {
+		if punishmentNumberCheck(i*i, i) {
+			res += i * i
+		}
+	}
+	return res
+}
+
+func punishmentNumberCheck(t, x int) bool {
+	if t == x {
+		return true
+	}
+	d := 10
+	for t >= d && t%d <= x {
+		if punishmentNumberCheck(t/d, x-(t%d)) {
+			return true
+		}
+		d *= 10
+	}
+	return false
+}
+
+// https://leetcode.cn/problems/number-of-senior-citizens/description/?envType=daily-question&envId=Invalid%20Date
+func countSeniors(details []string) int {
+	res := 0
+	for _, d := range details {
+		temp := (d[11]-'0')*10 + (d[12] - '0')
+		if temp > 60 {
+			res++
+		}
+	}
+	return res
+}
+
+// https://leetcode.cn/problems/maximal-score-after-applying-k-operations/?envType=daily-question&envId=2023-10-18
+func maxKelements(nums []int, k int) int64 {
+
+	return 0
+}
+
 // https://leetcode.cn/problems/single-number-ii/description/?envType=daily-question&envId=2023-10-15
 func singleNumber2(nums []int) int {
 	ans := int32(0)
