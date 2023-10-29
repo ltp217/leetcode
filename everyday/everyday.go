@@ -10,6 +10,75 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/h-index/description/?envType=daily-question&envId=2023-10-29
+func hIndex(citations []int) int {
+	// 答案最多只能到数组长度
+	left, right := 0, len(citations)
+	var mid int
+	for left < right {
+		// +1 防止死循环
+		mid = (left + right + 1) >> 1
+		cnt := 0
+		for _, v := range citations {
+			if v >= mid {
+				cnt++
+			}
+		}
+		if cnt >= mid {
+			// 要找的答案在 [mid,right] 区间内
+			left = mid
+		} else {
+			// 要找的答案在 [0,mid) 区间内
+			right = mid - 1
+		}
+	}
+	return left
+}
+
+// https://leetcode.cn/problems/take-gifts-from-the-richest-pile/?envType=daily-question&envId=2023-10-28
+func pickGifts(gifts []int, k int) int64 {
+	q := &pq{}
+	for _, gift := range gifts {
+		q.Push(gift)
+	}
+	heap.Init(q)
+	for k > 0 {
+		x := heap.Pop(q).(int)
+		heap.Push(q, int(math.Floor(math.Sqrt(float64(x)))))
+		k--
+	}
+	var res int64
+	for q.Len() > 0 {
+		res += int64(q.Pop().(int))
+	}
+	return res
+}
+
+type pq []int
+
+func (q pq) Len() int {
+	return len(q)
+}
+
+func (q pq) Less(i, j int) bool {
+	return q[i] > q[j]
+}
+
+func (q pq) Swap(i, j int) {
+	q[i], q[j] = q[j], q[i]
+}
+
+func (q *pq) Push(v interface{}) {
+	*q = append(*q, v.(int))
+}
+
+func (q *pq) Pop() interface{} {
+	n := len(*q)
+	res := (*q)[n-1]
+	*q = (*q)[0 : n-1]
+	return res
+}
+
 // https://leetcode.cn/problems/count-the-digits-that-divide-a-number/description/?envType=daily-question&envId=2023-10-26
 func countDigits(num int) int {
 	res := 0
