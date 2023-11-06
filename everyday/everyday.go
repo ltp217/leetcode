@@ -10,6 +10,25 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/maximum-product-of-word-lengths/description/?envType=daily-question&envId=2023-11-06
+func maxProduct(words []string) int {
+	masks := make([]int, len(words))
+	for i, word := range words {
+		for _, c := range word {
+			masks[i] |= 1 << (c - 'a')
+		}
+	}
+	res := 0
+	for i, x := range masks {
+		for j, y := range masks[:i] {
+			if x&y == 0 && len(words[i])*len(words[j]) > res {
+				res = len(words[i]) * len(words[j])
+			}
+		}
+	}
+	return res
+}
+
 // https://leetcode.cn/problems/h-index/description/?envType=daily-question&envId=2023-10-29
 func hIndex(citations []int) int {
 	// 答案最多只能到数组长度
