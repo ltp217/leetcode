@@ -10,6 +10,18 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/successful-pairs-of-spells-and-potions/?envType=daily-question&envId=2023-11-10
+func successfulPairs(spells []int, potions []int, success int64) []int {
+	n := len(spells)
+	res := make([]int, n)
+	m := len(potions)
+	sort.Ints(potions)
+	for i, s := range spells {
+		res[i] = m - sort.SearchInts(potions, (int(success)-1)/s+1)
+	}
+	return res
+}
+
 // https://leetcode.cn/problems/maximum-product-of-word-lengths/description/?envType=daily-question&envId=2023-11-06
 func maxProduct(words []string) int {
 	masks := make([]int, len(words))
