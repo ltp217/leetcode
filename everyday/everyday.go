@@ -10,6 +10,19 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/maximum-subarray/description/?envType=daily-question&envId=2023-11-20
+func maxSubArray(nums []int) int { // 前缀和
+	n := len(nums)
+	dp := make([]int, n)
+	dp[0] = nums[0]
+	res := nums[0]
+	for i := 1; i < n; i++ {
+		dp[i] = max(nums[i], dp[i-1]+nums[i])
+		res = max(res, dp[i])
+	}
+	return res
+}
+
 // https://leetcode.cn/problems/successful-pairs-of-spells-and-potions/?envType=daily-question&envId=2023-11-10
 func successfulPairs(spells []int, potions []int, success int64) []int {
 	n := len(spells)
@@ -1395,7 +1408,8 @@ func checkIfPrerequisite(numCourses int, prerequisites [][]int, queries [][]int)
 }
 
 func main() {
-	fmt.Println(distMoney(16, 2))
+	fmt.Println(maxSubArray([]int{5, 4, -1, 7, 8}))
+	//fmt.Println(distMoney(16, 2))
 	//fmt.Println(captureForts([]int{1, 0, 0, -1, 0, 0, 0, 0, 1}))
 	//maxEqualRowsAfterFlips([][]int{{0, 0, 0}, {0, 0, 1}, {1, 1, 0}})
 	//words := []string{"bzmxvzjxfddcuznspdcbwiojiqf", "mwguoaskvramwgiweogzulcinycosovozppl", "uigevazgbrddbcsvrvnngfrvkhmqszjicpieahs", "uivcdsboxnraqpokjzaayedf", "yalc", "bbhlbmpskgxmxosft", "vigplemkoni", "krdrlctodtmprpxwditvcps", "gqjwokkskrb", "bslxxpabivbvzkozzvdaykaatzrpe", "qwhzcwkchluwdnqjwhabroyyxbtsrsxqjnfpadi", "siqbezhkohmgbenbkikcxmvz", "ddmaireeouzcvffkcohxus", "kjzguljbwsxlrd", "gqzuqcljvcpmoqlnrxvzqwoyas", "vadguvpsubcwbfbaviedr", "nxnorutztxfnpvmukpwuraen", "imgvujjeygsiymdxp", "rdzkpk", "cuap", "qcojjumwp", "pyqzshwykhtyzdwzakjejqyxbganow", "cvxuskhcloxykcu", "ul", "axzscbjajazvbxffrydajapweci"}
