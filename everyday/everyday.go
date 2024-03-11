@@ -10,6 +10,53 @@ import (
 	"unicode"
 )
 
+// https://leetcode.cn/problems/capitalize-the-title/description/?envType=daily-question&envId=2024-03-11
+func capitalizeTitle(title string) string {
+	words := strings.Split(title, " ")
+	for i, word := range words {
+		if len(word) <= 2 {
+			words[i] = strings.ToLower(word)
+		} else {
+			words[i] = strings.ToUpper(word[:1]) + strings.ToLower(word[1:])
+		}
+	}
+	return strings.Join(words, " ")
+}
+
+// https://leetcode.cn/problems/bulls-and-cows/description/?envType=daily-question&envId=2024-03-10
+func getHint(secret string, guess string) string {
+	map1, map2 := make(map[rune]int), make(map[rune]int)
+	var arr1, arr2 []rune
+	for _, v := range secret {
+		arr1 = append(arr1, v)
+		map1[v]++
+	}
+	for _, v := range guess {
+		arr2 = append(arr2, v)
+		map2[v]++
+	}
+	a, b := 0, 0
+	for i := 0; i < len(arr1); i++ {
+		if arr1[i] == arr2[i] {
+			a++
+			map1[arr1[i]]--
+			map2[arr1[i]]--
+		}
+	}
+	for k, v := range map1 {
+		if v > 0 {
+			b += min(v, map2[k])
+		}
+	}
+	return fmt.Sprintf("%dA%dB", a, b)
+}
+
+// https://leetcode.cn/problems/number-of-ways-to-arrive-at-destination/description/?envType=daily-question&envId=2024-03-05
+// 到达目的地的方案数
+func countPaths(n int, roads [][]int) int {
+	return 0
+}
+
 // https://leetcode.cn/problems/implement-queue-using-stacks/?envType=daily-question&envId=2024-03-04
 type MyQueue struct {
 	stack1 []int
